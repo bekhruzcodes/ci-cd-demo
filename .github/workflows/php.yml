@@ -9,27 +9,21 @@ on:
       - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        coverage: none
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y php-cli php-mbstring php-xml php-curl php-zip
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Run tests (if any)
-        run: |
-          echo "No tests to run for now."
-
-      - name: Deploy to Server
-        run: |
-          echo "Deploy your PHP project to your server here!"
+    - name: Run tests
+      run: ./vendor/bin/phpunit tests
